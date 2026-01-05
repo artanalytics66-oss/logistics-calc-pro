@@ -1,24 +1,18 @@
-import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    // Вот эта строчка спасает от белого экрана:
-    server: {
-      port: 3000,
-      host: '0.0.0.0',
-    },
+    // Включаем относительные пути, это решает 99% проблем с белым экраном
+    base: './',
     plugins: [react()],
+    build: {
+      outDir: 'dist',
+    },
     define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-    },
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      'process.env.VITE_GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+    }
   };
 });
