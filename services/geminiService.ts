@@ -3,7 +3,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { DeliveryInputs, CalculationResults } from "../types";
 
 export const getAIAnalysis = async (inputs: DeliveryInputs, results: CalculationResults) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY || '' });
   
   const prompt = `
     Как финансовый аналитик в сфере логистики, проанализируй следующие данные по доставке товара:
