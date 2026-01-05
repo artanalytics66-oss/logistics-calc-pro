@@ -14,16 +14,34 @@ const App: React.FC = () => {
     distance: 150,
     outletCount: 10,
     avgStopDuration: 20,
-    totalWeight: 500
+    totalWeight: 500,
+    avgSpeed: 45,
+    repairTiresPerKm: 5.5,
+    payrollTaxRate: 30.2,
+    overheadRate: 15
   });
 
   const results = useMemo((): CalculationResults => {
+    // 1. Fuel Cost
     const fuelCost = (inputs.distance / 100) * inputs.fuelConsumption * inputs.fuelPrice;
-    const laborCost = inputs.driverSalary;
-    const maintenanceCost = inputs.vehicleMaintenance;
-    const totalCost = fuelCost + laborCost + maintenanceCost;
     
-    const drivingTime = inputs.distance / 50; // assuming 50km/h avg
+    // 2. Labor Cost with Taxes
+    const laborBase = inputs.driverSalary;
+    const taxes = laborBase * (inputs.payrollTaxRate / 100);
+    const laborTotal = laborBase + taxes;
+    
+    // 3. Maintenance (Fixed Daily + Variable per KM)
+    const maintenanceTotal = inputs.vehicleMaintenance + (inputs.distance * inputs.repairTiresPerKm);
+    
+    // 4. Subtotal (Direct costs)
+    const directCosts = fuelCost + laborTotal + maintenanceTotal;
+    
+    // 5. Final Total with Overheads
+    const overheads = directCosts * (inputs.overheadRate / 100);
+    const totalCost = directCosts + overheads;
+    
+    // 6. Time Calculation
+    const drivingTime = inputs.distance / Math.max(1, inputs.avgSpeed);
     const stopTime = (inputs.outletCount * inputs.avgStopDuration) / 60;
     const totalTimeHours = drivingTime + stopTime;
 
@@ -35,8 +53,10 @@ const App: React.FC = () => {
       totalTimeHours,
       breakdown: {
         fuel: fuelCost,
-        labor: laborCost,
-        maintenance: maintenanceCost
+        labor: laborBase,
+        maintenance: maintenanceTotal,
+        taxes: taxes,
+        overheads: overheads
       }
     };
   }, [inputs]);
@@ -62,7 +82,7 @@ const App: React.FC = () => {
             </div>
             <div className="hidden md:block text-right">
               <span className="text-sm bg-indigo-600 px-3 py-1 rounded-full border border-indigo-400">
-                v1.0.2 Stable
+                v1.1.0 Detail Edition
               </span>
             </div>
           </div>
