@@ -6,7 +6,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     // Вот эта строчка спасает от белого экрана:
-    base: '/',
     server: {
       port: 3000,
       host: '0.0.0.0',
