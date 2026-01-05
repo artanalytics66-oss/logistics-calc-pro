@@ -8,6 +8,10 @@ export interface DeliveryInputs {
   outletCount: number;
   avgStopDuration: number; // minutes
   totalWeight: number; // kg
+  avgSpeed: number; // km/h
+  repairTiresPerKm: number; // rub/km
+  payrollTaxRate: number; // %
+  overheadRate: number; // %
 }
 
 export interface CalculationResults {
@@ -20,6 +24,8 @@ export interface CalculationResults {
     fuel: number;
     labor: number;
     maintenance: number;
+    taxes: number;
+    overheads: number;
   };
 }
 
@@ -27,4 +33,3 @@ export interface AIAdvice {
   summary: string;
   recommendations: string[];
   optimizationTips: string[];
-}
