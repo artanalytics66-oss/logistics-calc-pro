@@ -3,7 +3,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { DeliveryInputs, CalculationResults } from "../types";
 
 export const getAIAnalysis = async (inputs: DeliveryInputs, results: CalculationResults) => {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY || '' });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   
   const prompt = `
     Как финансовый аналитик в сфере логистики, проанализируй следующие данные по доставке товара:
@@ -11,17 +11,21 @@ export const getAIAnalysis = async (inputs: DeliveryInputs, results: Calculation
     Входные данные:
     - Расстояние: ${inputs.distance} км
     - Количество точек: ${inputs.outletCount}
+    - Средняя скорость: ${inputs.avgSpeed} км/ч
     - Расход топлива: ${inputs.fuelConsumption} л/100км
-    - Цена топлива: ${inputs.fuelPrice} руб/л
-    - Зарплата водителя (день): ${inputs.driverSalary} руб
-    - Обслуживание авто (день): ${inputs.vehicleMaintenance} руб
+    - Налоги на ФОТ: ${inputs.payrollTaxRate}%
+    - Коэффициент накладных расходов: ${inputs.overheadRate}%
+    - Расходы на ремонт/шины: ${inputs.repairTiresPerKm} руб/км
     
     Результаты расчета:
-    - Общая себестоимость: ${results.totalCost.toFixed(2)} руб
+    - Полная себестоимость: ${results.totalCost.toFixed(2)} руб
+    - Налоги в структуре: ${results.breakdown.taxes.toFixed(2)} руб
+    - Накладные расходы: ${results.breakdown.overheads.toFixed(2)} руб
     - Стоимость на 1 точку: ${results.costPerOutlet.toFixed(2)} руб
     - Стоимость на 1 км: ${results.costPerKm.toFixed(2)} руб
+    - Время рейса: ${results.totalTimeHours.toFixed(1)} ч
     
-    Дай краткий анализ эффективности, выдели "узкие места" и предложи 3 конкретных совета по оптимизации затрат.
+    Дай краткий анализ эффективности, обрати внимание на влияние налогов и накладных расходов. Предложи 3 конкретных совета по оптимизации затрат.
     Отвечай на русском языке.
   `;
 

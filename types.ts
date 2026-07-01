@@ -33,3 +33,4 @@ export interface AIAdvice {
   summary: string;
   recommendations: string[];
   optimizationTips: string[];
+}

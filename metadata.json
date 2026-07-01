@@ -1,5 +1,6 @@
 {
   "name": "Delivery Cost Calculator Pro",
   "description": "A financial tool for calculating the cost of goods delivery across multiple retail points, featuring AI-powered optimization insights and detailed cost breakdown visualizations.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }
